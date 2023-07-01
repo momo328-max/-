@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inspur.dao.RestRecordMapper">
+  <resultMap id="BaseResultMap" type="com.inspur.pojo.RestRecord">
+    <id column="rest_id" jdbcType="BIGINT" property="restId" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="rest_start_date" jdbcType="VARCHAR" property="restStartDate" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="rest_end_date" jdbcType="VARCHAR" property="restEndDate" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="rest_time" jdbcType="VARCHAR" property="restTime" />
+    <result column="rest_course" jdbcType="VARCHAR" property="restCourse" />
+    <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="state" jdbcType="CHAR" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rest_id, account, rest_start_date, start_time, rest_end_date, end_time, rest_time, 
+    rest_course, notes, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_rest_record
+    where rest_id = #{restId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" parameterType="com.inspur.pojo.RestRecord" resultMap="BaseResultMap">
+    select
+    *
+    from t_rest_record
+    where 1=1
+    <if test="restStartDate neq null and restStartDate!=''">
+    and rest_start_date >=#{restStartDate,jdbcType=VARCHAR}
+    </if>
+    <if test="restEndDate neq null and restEndDate!=''">
+      and #{restEndDate,jdbcType=VARCHAR} >=rest_end_date
+    </if>
+    <if test="state neq null and state !=''">
+      AND state = #{state}
+    </if>
+    <if test="account neq null and account != ''">
+      and account like CONCAT('%', #{account}, '%')
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_rest_record
+    where rest_id = #{restId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.inspur.pojo.RestRecord">
+    insert into t_rest_record (rest_id, account, rest_start_date, 
+      start_time, rest_end_date, end_time, 
+      rest_time, rest_course, notes, 
+      state)
+    values (#{restId,jdbcType=BIGINT}, #{account,jdbcType=VARCHAR}, #{restStartDate,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{restEndDate,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{restTime,jdbcType=VARCHAR}, #{restCourse,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, 
+      #{state,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inspur.pojo.RestRecord">
+    insert into t_rest_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="restId != null">
+        rest_id,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="restStartDate != null">
+        rest_start_date,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="restEndDate != null">
+        rest_end_date,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="restTime != null">
+        rest_time,
+      </if>
+      <if test="restCourse != null">
+        rest_course,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="state != null and state !=''">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="restId != null">
+        #{restId,jdbcType=BIGINT},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="restStartDate != null">
+        #{restStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restEndDate != null">
+        #{restEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restTime != null">
+        #{restTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restCourse != null">
+        #{restCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null and state !=''">
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inspur.pojo.RestRecord">
+    update t_rest_record
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="restStartDate != null">
+        rest_start_date = #{restStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restEndDate != null">
+        rest_end_date = #{restEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restTime != null">
+        rest_time = #{restTime,jdbcType=VARCHAR},
+      </if>
+      <if test="restCourse != null">
+        rest_course = #{restCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where rest_id = #{restId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inspur.pojo.RestRecord">
+    update t_rest_record
+    set account = #{account,jdbcType=VARCHAR},
+      rest_start_date = #{restStartDate,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      rest_end_date = #{restEndDate,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      rest_time = #{restTime,jdbcType=VARCHAR},
+      rest_course = #{restCourse,jdbcType=VARCHAR},
+      notes = #{notes,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR}
+    where rest_id = #{restId,jdbcType=BIGINT}
+  </update>
+</mapper>

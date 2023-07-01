@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inspur.dao.DepartmentDao">
+
+    <select id="selectAll" resultType="Department" parameterType="java.lang.String">
+        select * from t_department
+        <if test="department_name neq null and department_name != ''">
+            where department_name LIKE CONCAT('%', #{department_name}, '%')
+        </if>
+    </select>
+
+    <select id="findById" resultType="Department">
+        select * from t_department where department_id=#{departmentId}
+    </select>
+    <insert id="insert" parameterType="com.inspur.pojo.Department">
+        insert into t_department (
+        department_name,
+        manager,
+        total_user,
+        create_time
+        )
+        values (#{departmentName,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR},
+        #{totalUser,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE})
+    </insert>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from t_department
+        where department_id=#{departmentId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="update" parameterType="com.inspur.pojo.Department">
+        update t_department
+        <set>
+            <if test="departmentName != null">
+                department_name = #{departmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="manager != null">
+                manager = #{manager,jdbcType=VARCHAR},
+            </if>
+            <if test="totalUser != null">
+                total_user = #{totalUser,jdbcType=INTEGER},
+            </if>
+        </set>
+        where department_id = #{departmentId,jdbcType=INTEGER}
+    </update>
+</mapper>

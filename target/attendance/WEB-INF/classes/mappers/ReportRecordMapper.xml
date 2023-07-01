@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inspur.dao.ReportRecordMapper">
+  <resultMap id="BaseResultMap" type="com.inspur.pojo.ReportRecord">
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="report_date" jdbcType="VARCHAR" property="reportDate" />
+    <result column="work_process" jdbcType="VARCHAR" property="workProcess" />
+    <result column="work_content" jdbcType="VARCHAR" property="workContent" />
+    <result column="tomorrow_plan" jdbcType="VARCHAR" property="tomorrowPlan" />
+    <result column="problem" jdbcType="VARCHAR" property="problem" />
+    <result column="other" jdbcType="VARCHAR" property="other" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    record_id, account, report_date, work_process, work_content, tomorrow_plan, problem, 
+    other
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_report_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_report_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.inspur.pojo.ReportRecord">
+    insert into t_report_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="reportDate != null">
+        report_date,
+      </if>
+      <if test="workProcess != null">
+        work_process,
+      </if>
+      <if test="workContent != null">
+        work_content,
+      </if>
+      <if test="tomorrowPlan != null">
+        tomorrow_plan,
+      </if>
+      <if test="problem != null">
+        problem,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        #{reportDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workProcess != null">
+        #{workProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null">
+        #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tomorrowPlan != null">
+        #{tomorrowPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="problem != null">
+        #{problem,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inspur.pojo.ReportRecord">
+    update t_report_record
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        report_date = #{reportDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workProcess != null">
+        work_process = #{workProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null">
+        work_content = #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tomorrowPlan != null">
+        tomorrow_plan = #{tomorrowPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="problem != null">
+        problem = #{problem,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inspur.pojo.ReportRecord">
+    update t_report_record
+    set account = #{account,jdbcType=VARCHAR},
+      report_date = #{reportDate,jdbcType=VARCHAR},
+      work_process = #{workProcess,jdbcType=VARCHAR},
+      work_content = #{workContent,jdbcType=VARCHAR},
+      tomorrow_plan = #{tomorrowPlan,jdbcType=VARCHAR},
+      problem = #{problem,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <select id="selectAll" parameterType="com.inspur.pojo.ReportRecordCondition" resultMap="BaseResultMap">
+    select
+    *
+    from t_report_record
+    where 1=1
+    <if test="account neq null and account != ''">
+      and account LIKE CONCAT('%', #{account}, '%')
+    </if>
+    <if test="startDate neq null and startDate != ''">
+      and report_date >= #{startDate}
+    </if>
+    <if test="endDate neq null and endDate != ''">
+      and #{endDate} >= report_date
+    </if>
+  </select>
+
+</mapper>

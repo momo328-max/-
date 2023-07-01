@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inspur.dao.WorkRecordMapper">
+  <resultMap id="BaseResultMap" type="com.inspur.pojo.WorkRecord">
+    <id column="record_id" jdbcType="INTEGER" property="recordId" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="work_date" jdbcType="VARCHAR" property="workDate" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="work_time" jdbcType="VARCHAR" property="workTime" />
+    <result column="work_course" jdbcType="VARCHAR" property="workCourse" />
+    <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="state" jdbcType="CHAR" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    record_id, account, work_date, start_time, end_time, work_time, work_course, notes, 
+    state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_work_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_work_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.inspur.pojo.WorkRecord">
+    insert into t_work_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="workDate != null">
+        work_date,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="workTime != null">
+        work_time,
+      </if>
+      <if test="workCourse != null">
+        work_course,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="state != null and state !=''">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null">
+        #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="workTime != null">
+        #{workTime,jdbcType=VARCHAR},
+      </if>
+      <if test="workCourse != null">
+        #{workCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null and state !=''">
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inspur.pojo.WorkRecord">
+    update t_work_record
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null">
+        work_date = #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="workTime != null">
+        work_time = #{workTime,jdbcType=VARCHAR},
+      </if>
+      <if test="workCourse != null">
+        work_course = #{workCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inspur.pojo.WorkRecord">
+    update t_work_record
+    set account = #{account,jdbcType=VARCHAR},
+      work_date = #{workDate,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      work_time = #{workTime,jdbcType=VARCHAR},
+      work_course = #{workCourse,jdbcType=VARCHAR},
+      notes = #{notes,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.inspur.pojo.WorkRecord">
+    SELECT * FROM t_work_record
+        WHERE 1=1
+        <if test="startTime neq null and startTime !=''">
+             and work_date >= #{startTime}
+        </if>
+        <if test="endTime neq null and endTime !=''">
+             AND #{endTime} >= work_date
+        </if>
+      <if test="state neq null and state !=''">
+        AND state = #{state}
+      </if>
+      <if test="account neq null and account != ''">
+        and account like CONCAT('%', #{account}, '%')
+      </if>
+ </select>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inspur.dao.UserDao">
+    <resultMap id="userResultMap" type="com.inspur.pojo.User">
+        <id property="id" column="id" />
+        <result property="account" column="account" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="sex" column="sex" />
+        <result property="birthday" column="birthday" />
+        <result property="mobile" column="mobile" />
+        <result property="email" column="email" />
+        <result property="userType" column="user_type" />
+        <result property="mylevel" column="mylevel" />
+        <result property="createTime" column="create_time" />
+        <result property="state" column="state" />
+        <!-- 配置关联对象 department -->
+        <association property="department" javaType="com.inspur.pojo.Department">
+            <id property="departmentId" column="department_id" />
+            <result property="departmentName" column="department_name" />
+            <result property="manager" column="manager" />
+            <result property="totalUser" column="total_user" />
+            <result property="createTime" column="department_create_time" />
+        </association>
+    </resultMap>
+    <select id="selectByName" resultType="User">
+        select * from t_user_info where account=#{account}
+    </select>
+    <select id="findById" parameterType="java.lang.Integer" resultType="User">
+        select * from t_user_info where id=#{id}
+    </select>
+    <select id="selectAll" parameterType="com.inspur.pojo.User" resultMap="userResultMap">
+        SELECT
+        u.id,
+        u.account,
+        u.password,
+        u.name,
+        u.department_id,
+        u.sex,
+        u.birthday,
+        u.mobile,
+        u.email,
+        u.user_type,
+        u.mylevel,
+        u.create_time,
+        u.state,
+        d.department_name,
+        d.manager,
+        d.total_user,
+        d.create_time as department_create_time
+        FROM
+        t_user_info u
+        LEFT JOIN t_department d ON u.department_id = d.department_id
+        WHERE
+        1 = 1
+        <if test="departmentId neq null">
+            and u.department_id = #{departmentId,jdbcType=INTEGER}
+        </if>
+        <if test="name neq null and name != ''">
+            and u.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        ORDER BY u.create_time DESC
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM user WHERE 1 = 1
+        <if test="id neq null">
+            AND id = #{id}
+        </if>
+        <if test="name neq null">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="departmentId neq null">
+            AND department_id = #{departmentId}
+        </if>
+    </select>
+    <insert id="insert" parameterType="com.inspur.pojo.User">
+        insert into t_user_info (mobile, account,
+        password, name, department_id,
+        sex, birthday, email,
+        user_type, mylevel, create_time,
+        state)
+        values (#{mobile,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER},
+        #{sex,jdbcType=CHAR}, #{birthday,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{userType,jdbcType=CHAR}, #{mylevel,jdbcType=CHAR}, #{createTime,jdbcType=DATE},
+        #{state,jdbcType=CHAR})
+    </insert>
+    <update id="update" parameterType="com.inspur.pojo.User">
+        update t_user_info
+        <set>
+            <if test="account != null">
+                account = #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=CHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=CHAR},
+            </if>
+            <if test="mylevel != null">
+                mylevel = #{mylevel,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=DATE},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=CHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from t_user_info
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+</mapper>
